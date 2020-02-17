@@ -30,7 +30,9 @@ var directions = {
   left: 68,
   down: 83,
   strafeLeft: 81,
-  strafeRight: 69
+  strafeRight: 69,
+  lookUp: 38,
+  lookDown: 40
 };
 
 
@@ -79,9 +81,6 @@ function init() {
   renderer.clearColor();
   var fog = new THREE.FogExp2(0x1565c0, 1);
   //scene.add(fog);
-
-
-
 
 
   // Create cubes and add them to the scene
@@ -135,7 +134,7 @@ function init() {
 // Renders the scene and updates the render as needed.
 function animate() {
   requestAnimationFrame(animate);
-	/*
+	
 	// update the picking ray with the camera and mouse position
 	raycaster.setFromCamera(mouse, camera);
 
@@ -145,7 +144,7 @@ function animate() {
 	for (var i = 0; i < intersects.length; i++) {
 		intersects[i].object.material.color.set(0xff0000);
 	}
-	*/
+	
   player.update();
 
 
