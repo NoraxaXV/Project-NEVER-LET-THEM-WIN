@@ -20,17 +20,32 @@ function onMouseMove(event) {
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 }
 
+function onClick(event) {
+  // update the picking ray with the camera and mouse position
+	raycaster.setFromCamera(mouse, camera);
+
+	// calculate objects intersecting the picking ray
+	var intersects = raycaster.intersectObjects(scene.children);
+ 	for (var i = 0; i < intersects.length; i++) {
+		//intersects[i].object.material.color.set(0xff0000);
+	}
+
+}
+
 
 console.log("Hello World! point=" + (++point));
 
 var vec3 = THREE.Vector3;
 var directions = {
   up: 87,
-  right: 65,
-  left: 68,
-  down: 83,
-  strafeLeft: 81,
-  strafeRight: 69,
+  down: 83, 
+  
+  right: 37,
+  left: 39,
+  
+  strafeLeft: 65,
+  strafeRight: 68,
+  
   lookUp: 38,
   lookDown: 40
 };
@@ -60,10 +75,13 @@ function init() {
 
   // Create a camera, zoom it out from the model a bit, and add it to the scene.
   camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 0.1, 20000);
-  camera.position.set(0, 0, -2);
-  camera.lookAt(0, 0, 0);
   scene.add(camera);
-  player = new Player(camera);
+  var geometry = new THREE.BoxGeometry(1, 1, 1);
+  var material = new THREE.MeshLambertMaterial({ color: 0x55b663});
+  material.side=THREE.Front;
+  
+  //Create the player
+  player = new Player(camera, geometry, material);
 
   // Create an event listener that resizes the renderer with the browser window.
   window.addEventListener("resize", function () {
@@ -79,13 +97,13 @@ function init() {
   // Set the background color of the scene.
   renderer.setClearColor(0x333f47, 1);
   renderer.clearColor();
+
   var fog = new THREE.FogExp2(0x1565c0, 1);
-  //scene.add(fog);
+  scene.add(fog);
 
 
   // Create cubes and add them to the scene
-  var geometry = new THREE.BoxGeometry(1, 1, 1);
-
+  var geometry = new THREE.SphereGeometry( 1, 32, 32 );
   var mesh;
   var boxHelper;
   var box3;
@@ -101,6 +119,7 @@ function init() {
     scene.add(mesh);
     scene.add(boxHelper);
   }
+  
   var plane = new THREE.Mesh(
     new THREE.PlaneGeometry(500, 500, 50, 50),
     new THREE.MeshLambertMaterial({ color: 0x595859, side: THREE.DoubleSide })
@@ -134,16 +153,6 @@ function init() {
 // Renders the scene and updates the render as needed.
 function animate() {
   requestAnimationFrame(animate);
-	
-	// update the picking ray with the camera and mouse position
-	raycaster.setFromCamera(mouse, camera);
-
-	// calculate objects intersecting the picking ray
-	var intersects = raycaster.intersectObjects(scene.children);
-
-	for (var i = 0; i < intersects.length; i++) {
-		intersects[i].object.material.color.set(0xff0000);
-	}
 	
   player.update();
 
